@@ -15,15 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
-"""Setup script."""
+"""Launch the LightEdge WLAN Information API Manager."""
 
-from setuptools import setup, find_packages
+from empower_core.launcher import main
 
-setup(name="lightedge-wia-manager",
-      version="1.0",
-      description="LightEdge WLAN Information API Manager",
-      author="Roberto Riggio",
-      author_email="roberto.riggio@gmail.com",
-      url="http://lightedge.github.io/",
-      long_description="The LightEdge WLAN Information API Manager",
-      packages=find_packages())
+
+if __name__ == '__main__':
+    main(config="/etc/lightedge-wia-manager")

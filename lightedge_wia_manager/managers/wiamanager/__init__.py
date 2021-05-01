@@ -15,15 +15,4 @@
 # specific language governing permissions and limitations
 # under the License.
 
-"""Setup script."""
-
-from setuptools import setup, find_packages
-
-setup(name="lightedge-wia-manager",
-      version="1.0",
-      description="LightEdge WLAN Information API Manager",
-      author="Roberto Riggio",
-      author_email="roberto.riggio@gmail.com",
-      url="http://lightedge.github.io/",
-      long_description="The LightEdge WLAN Information API Manager",
-      packages=find_packages())
+"""WLAN Information API Manager."""
