@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2021 Roberto Riggio
+# Copyright (c) 2019 Roberto Riggio
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,65 +17,70 @@
 
 """WLAN Information API Manager."""
 
-from empower_core.service import EService
-from empower_core.serialize import serializable_dict
+import json
 
-from lightedge_wia_manager.managers.wiamanager.querieshandler \
-    import QueriesHandler
+from tornado.httpclient import AsyncHTTPClient
+
+from empower_core.appworker import EVERY
+from empower_core.launcher import srv_or_die
+
+from lightedge_core.mecmanager import DEFAULT_REGISTRY
+from lightedge_core.mecmanager import MECManager
+from lightedge_core.subscription import Subscription
+from lightedge_core.subscriptionshandler import SubscriptionsHandler
+from lightedge_core.subscriptionscallbackhandler \
+    import SubscriptionsCallbackHandler
 
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8888
+DEFAULT_USER = "root"
+DEFAULT_PWD = "root"
 
 
-@serializable_dict
-class APInfo():
-    """ Information on APs available from the WLAN Access Information
-    Service."""
+class WIAManager(MECManager):
+    """Service exposing the WLAN Information API."""
 
-    def __init__(self):
+    HANDLERS = [SubscriptionsHandler, SubscriptionsCallbackHandler]
 
-        self.info = {
-            "apId": None,
-            "channel": None,
-            "wlanCap": None,
-            "wanMetrics": None,
-            "bssLoad": None,
-            "extBssLoad": None,
-            "apLocation": None,
-            "apNeighbor": None
-        }
+    SUBSCRIPTIONS = {
+        "MeasRcStatsSubscription":
+            "lightedge_wia_manager.workers.measrcstats.measrcstats"
+    }
 
-    def to_dict(self):
-        """Return JSON-serializable representation of the object."""
-
-        return self.info
-
-
-class WIAManager(EService):
-    """WLAN Information API Manager.
-
-    Parameters:
-        ctrl_host: sd-ran controller host (optional, default: 127.0.0.1)
-        ctrl_host: sd-ran controller port (optional, default: 8888)
-    """
-
-    HANDLERS = [QueriesHandler]
-
-    def __init__(self, context, service_id, ctrl_host, ctrl_port):
+    def __init__(self, context, service_id, ctrl_host, ctrl_port,
+                 ctrl_user, ctrl_pwd, registry, every=EVERY):
 
         super().__init__(context=context, service_id=service_id,
-                         ctrl_host=ctrl_host, ctrl_port=ctrl_port)
+                         ctrl_host=ctrl_host, ctrl_port=ctrl_port,
+                         ctrl_user=ctrl_user, ctrl_pwd=ctrl_pwd,
+                         registry=registry, every=every)
 
-        self.aps = list()
+    @property
+    def mec_service(self):
+        """Return MEC service descriptor."""
 
-        ap1 = APInfo()
+        return {
+            "serInstanceId": self.service_id,
+            "serName": "WLAN Information API",
+            "serCategory": {
+                "href": "/wia/v1/",
+                "id": "wia",
+                "name": "WLAN Information API",
+                "version": "1.0"
+            },
+            "version": "1.0",
+            "state": self.state,
+            "serializer": "JSON",
+        }
 
-        self.aps.append(ap1)
+    @property
+    def empower_url(self):
+        """Return empower URL."""
 
-    def get_aps(self):
-        """Return the APs."""
+        params = (self.ctrl_user, self.ctrl_pwd, self.ctrl_host,
+                  self.ctrl_port)
 
-        return self.aps
+        return "http://%s:%s@%s:%u/api/v1" % params
 
     @property
     def ctrl_host(self):
@@ -100,16 +105,48 @@ class WIAManager(EService):
 
     @ctrl_port.setter
     def ctrl_port(self, value):
-        """Set host."""
+        """Set ctrl_port."""
 
         if "ctrl_port" in self.params and self.params["ctrl_port"]:
             raise ValueError("Param ctrl_port can not be changed")
 
         self.params["ctrl_port"] = int(value)
 
+    @property
+    def ctrl_user(self):
+        """Return ctrl_user."""
+
+        return self.params["ctrl_user"]
+
+    @ctrl_user.setter
+    def ctrl_user(self, value):
+        """Set ctrl_user."""
+
+        if "ctrl_user" in self.params and self.params["ctrl_user"]:
+            raise ValueError("Param ctrl_user can not be changed")
+
+        self.params["ctrl_user"] = value
+
+    @property
+    def ctrl_pwd(self):
+        """Return ctrl_pwd."""
+
+        return self.params["ctrl_pwd"]
+
+    @ctrl_pwd.setter
+    def ctrl_pwd(self, value):
+        """Set ctrl_pwd."""
+
+        if "ctrl_pwd" in self.params and self.params["ctrl_pwd"]:
+            raise ValueError("Param ctrl_pwd can not be changed")
+
+        self.params["ctrl_pwd"] = value
+
 
 def launch(context, service_id, ctrl_host=DEFAULT_HOST,
-           ctrl_port=DEFAULT_PORT):
+           ctrl_port=DEFAULT_PORT, ctrl_user=DEFAULT_USER,
+           ctrl_pwd=DEFAULT_PWD, registry=DEFAULT_REGISTRY, every=EVERY):
     """ Initialize the module. """
 
-    return WIAManager(context, service_id, ctrl_host, ctrl_port)
+    return WIAManager(context, service_id, ctrl_host, ctrl_port, ctrl_user,
+                      ctrl_pwd, registry, every)

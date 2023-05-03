@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-"""Queries RESTful interface for WLAN Information API."""
+"""Exposes a RESTful interface ."""
 
 import uuid
 
@@ -23,24 +23,15 @@ import empower_core.apimanager.apimanager as apimanager
 
 
 # pylint: disable=W0223
-class QueriesHandler(apimanager.APIHandler):
-    """Queries RESTful interface for WLAN Information API."""
+class SubscriptionsCallbackHandler(apimanager.APIHandler):
+    """Access the RNI subscriptions."""
 
-    URLS = [r"/wia/v1/queries/(sta|ap)"]
+    URLS = [r"/wia/v1/subscriptions/([a-zA-Z0-9-]*)/ch/?"]
 
-    @apimanager.validate(min_args=1, max_args=1)
-    def get(self, query):
-        """Perform a query on the WIA
+    @apimanager.validate(returncode=201, min_args=1, max_args=1)
+    def post(self, *args, **kwargs):
+        """Handle an incoming callback."""
 
-        Example URLs:
+        service_id = uuid.UUID(args[0])
 
-            GET /wia/v1/queries/
-                ap?filter=(eq,apId,admiralsclub)&fields=apId,wlanCap
-
-            {
-            }
-        """
-
-        print(query)
-
-        return self.service.get_aps()
+        self.service.subscriptions[service_id].handle_response(kwargs)
