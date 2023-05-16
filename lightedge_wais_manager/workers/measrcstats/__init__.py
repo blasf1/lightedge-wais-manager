@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2020 Roberto Riggio
+# Copyright (c) 2023 Gabriel Cebrian-Marquez
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 MANIFEST = {
     "label": "Measurement RC Stats Subscription",
-    "desc": "A subscription to RC stats notifications from WIA",
+    "desc": "A subscription to RC stats notifications from WAIS",
     "callbacks": {
         "default": "Called when new measurements are available"
     },

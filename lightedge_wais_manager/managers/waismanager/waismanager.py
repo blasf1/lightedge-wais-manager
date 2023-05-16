@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
 # Copyright (c) 2019 Roberto Riggio
+# Copyright (c) 2023 Gabriel Cebrian-Marquez
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-"""WLAN Information API Manager."""
+"""WLAN Access Information Service Manager."""
 
 import json
 
@@ -37,14 +38,14 @@ DEFAULT_USER = "root"
 DEFAULT_PWD = "root"
 
 
-class WIAManager(MECManager):
-    """Service exposing the WLAN Information API."""
+class WAIManager(MECManager):
+    """Service exposing the WLAN Access Information API."""
 
     HANDLERS = [SubscriptionsHandler, SubscriptionsCallbackHandler]
 
     SUBSCRIPTIONS = {
         "MeasRcStatsSubscription":
-            "lightedge_wia_manager.workers.measrcstats.measrcstats"
+            "lightedge_wais_manager.workers.measrcstats.measrcstats"
     }
 
     def __init__(self, context, service_id, ctrl_host, ctrl_port,
@@ -61,11 +62,11 @@ class WIAManager(MECManager):
 
         return {
             "serInstanceId": self.service_id,
-            "serName": "WLAN Information API",
+            "serName": "WLAN Access Information Service",
             "serCategory": {
-                "href": "/wia/v1/",
-                "id": "wia",
-                "name": "WLAN Information API",
+                "href": "/wai/v2/",
+                "id": "wais",
+                "name": "WLAN Access Information Service",
                 "version": "1.0"
             },
             "version": "1.0",
@@ -148,5 +149,5 @@ def launch(context, service_id, ctrl_host=DEFAULT_HOST,
            ctrl_pwd=DEFAULT_PWD, registry=DEFAULT_REGISTRY, every=EVERY):
     """ Initialize the module. """
 
-    return WIAManager(context, service_id, ctrl_host, ctrl_port, ctrl_user,
+    return WAIManager(context, service_id, ctrl_host, ctrl_port, ctrl_user,
                       ctrl_pwd, registry, every)

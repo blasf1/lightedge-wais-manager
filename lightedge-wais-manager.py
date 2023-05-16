@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2021 Roberto Riggio
+# Copyright (c) 2023 Gabriel Cebrian-Marquez
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
-"""Launch the LightEdge WLAN Information API Manager."""
+"""Launch the LightEdge WLAN Access Information Service Manager."""
 
 from empower_core.launcher import main
 
 
 if __name__ == '__main__':
-    main(config="/etc/lightedge-wia-manager")
+    main(config="/etc/lightedge-wais-manager")

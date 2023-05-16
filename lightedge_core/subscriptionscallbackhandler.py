@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
 # Copyright (c) 2021 Roberto Riggio
+# Copyright (c) 2023 Gabriel Cebrian-Marquez
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,9 +25,9 @@ import empower_core.apimanager.apimanager as apimanager
 
 # pylint: disable=W0223
 class SubscriptionsCallbackHandler(apimanager.APIHandler):
-    """Access the RNI subscriptions."""
+    """Access the WAIS subscriptions."""
 
-    URLS = [r"/wia/v1/subscriptions/([a-zA-Z0-9-]*)/ch/?"]
+    URLS = [r"/wai/v2/subscriptions/([a-zA-Z0-9-]*)/ch/?"]
 
     @apimanager.validate(returncode=201, min_args=1, max_args=1)
     def post(self, *args, **kwargs):

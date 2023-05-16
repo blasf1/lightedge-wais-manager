@@ -88,7 +88,7 @@ class MeasRcStats(Subscription):
         self.app_id = location.split("/")[-1]
 
         # Add callback
-        callback = "%s/wia/v1/subscriptions/%s/ch" % (self.uri,
+        callback = "%s/wai/v2/subscriptions/%s/ch" % (self.uri,
                                                       self.service_id)
 
         data = {

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
 # Copyright (c) 2020 Roberto Riggio
+# Copyright (c) 2023 Gabriel Cebrian-Marquez
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,10 +25,10 @@ import empower_core.apimanager.apimanager as apimanager
 
 # pylint: disable=W0223
 class SubscriptionsHandler(apimanager.APIHandler):
-    """Access the WIA subscriptions."""
+    """Access the WAIS subscriptions."""
 
-    URLS = [r"/wia/v1/subscriptions/?",
-            r"/wia/v1/subscriptions/([a-zA-Z0-9-]*)/?"]
+    URLS = [r"/wai/v2/subscriptions/?",
+            r"/wai/v2/subscriptions/([a-zA-Z0-9-]*)/?"]
 
     @apimanager.validate(min_args=0, max_args=1)
     def get(self, sub_id=None):
@@ -35,19 +36,19 @@ class SubscriptionsHandler(apimanager.APIHandler):
 
         Example URLs:
 
-            GET /wia/v1/subscriptions
+            GET /wai/v2/subscriptions
 
             {
               "_links": {
                 "self": {
-                  "href": "http://uri/wia/v1/subscriptions"
+                  "href": "http://uri/wai/v2/subscriptions"
                 },
                 "subscription": [{
-                    "href": "http://uri/wia/v1/subscriptions/1",
+                    "href": "http://uri/wai/v2/subscriptions/1",
                     "subscriptionType": "MeasRcStatsSubscription"
                   },
                   {
-                    "href": "http://uri/wia/v1/subscriptions/2",
+                    "href": "http://uri/wai/v2/subscriptions/2",
                     "subscriptionType": "MeasRcStatsSubscription"
                   }
                 ]
@@ -64,10 +65,10 @@ class SubscriptionsHandler(apimanager.APIHandler):
     def post(self, *args, **kwargs):
         """Create a new subscription.
 
-        POST /wia/v1/subscriptions
+        POST /wai/v2/subscriptions
 
         {
-          "callbackReference": "http://client.example.com/wia/v1/",
+          "callbackReference": "http://client.example.com/wai/v2/",
           "filterCriteria": { },
           "expiryDeadline": {
             "seconds": 1577836800,
@@ -82,7 +83,7 @@ class SubscriptionsHandler(apimanager.APIHandler):
         sub = \
             self.service.add_subscription(sub_id=sub_id, params=kwargs)
 
-        self.set_header("Location", "/wia/v1/subscriptions/%s" %
+        self.set_header("Location", "/wai/v2/subscriptions/%s" %
                         sub.service_id)
 
     @apimanager.validate(returncode=204, min_args=0, max_args=1)
@@ -95,7 +96,7 @@ class SubscriptionsHandler(apimanager.APIHandler):
 
         Example URLs:
 
-            DELETE /wia/v1/subscriptions/
+            DELETE /wai/v2/subscriptions/
               52313ecb-9d00-4b7d-b873-b55d3d9ada26
         """
 

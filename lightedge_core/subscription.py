@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
 # Copyright (c) 2020 Roberto Riggio
+# Copyright (c) 2023 Gabriel Cebrian-Marquez
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,14 +16,14 @@
 # specific language governing permissions and limitations
 # under the License.
 
-"""A genercic subscription."""
+"""A generic subscription."""
 
 from empower_core.launcher import srv_or_die
 from empower_core.worker import EWorker
 
 
 class Subscription(EWorker):
-    """A generci subscription."""
+    """A generic subscription."""
 
     SUB_TYPE = None
     SUB_CONFIG = None
@@ -35,7 +36,7 @@ class Subscription(EWorker):
         super().__init__(context=context, service_id=service_id, every=every,
                          subscription=subscription, uri=uri)
 
-        self.manager = srv_or_die("wiamanager")
+        self.manager = srv_or_die("waismanager")
 
     def handle_response(self, callback):
         """Handle response to one subscription."""

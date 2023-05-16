@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2021 Roberto Riggio
+# Copyright (c) 2023 Gabriel Cebrian-Marquez
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@
 
 from setuptools import setup, find_packages
 
-setup(name="lightedge-wia-manager",
+setup(name="lightedge-wais-manager",
       version="1.0",
-      description="LightEdge WLAN Information API Manager",
-      author="Roberto Riggio",
-      author_email="roberto.riggio@gmail.com",
+      description="LightEdge WLAN Access Information Service Manager",
+      author="Gabriel Cebrian-Marquez",
+      author_email="Gabriel.Cebrian@uclm.es",
       url="http://lightedge.github.io/",
-      long_description="The LightEdge WLAN Information API Manager",
+      long_description="The LightEdge WLAN Access Information Service Manager",
       packages=find_packages())
