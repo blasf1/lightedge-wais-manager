@@ -20,7 +20,7 @@ jobs:
             echo "Caught SIGTERM signal!"
             kill -TERM "\$child"
           }
-          wait-for mongo:27017 -- python3 /lightedge-wais-mananger.py
+          wait-for mongo:27017 -- python3 /lightedge-wais-manager.py
           EOF
           chmod +x entrypoint.sh
 
